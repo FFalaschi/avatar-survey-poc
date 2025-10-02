@@ -150,7 +150,7 @@ export default function SurveyForm({ onSubmit, initialData }: SurveyFormProps) {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder:text-gray-400"
           placeholder="B2B SaaS Customer Research"
         />
       </div>
@@ -168,7 +168,7 @@ export default function SurveyForm({ onSubmit, initialData }: SurveyFormProps) {
               type="text"
               value={personaName}
               onChange={(e) => setPersonaName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
               placeholder="B2B Researcher"
             />
           </div>
@@ -181,7 +181,7 @@ export default function SurveyForm({ onSubmit, initialData }: SurveyFormProps) {
               type="text"
               value={avatarId}
               onChange={(e) => setAvatarId(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
               placeholder="professional_female_01"
             />
           </div>
@@ -194,7 +194,7 @@ export default function SurveyForm({ onSubmit, initialData }: SurveyFormProps) {
               type="text"
               value={voiceId}
               onChange={(e) => setVoiceId(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
               placeholder="calm_voice_02"
             />
           </div>
@@ -208,7 +208,7 @@ export default function SurveyForm({ onSubmit, initialData }: SurveyFormProps) {
             value={systemPrompt}
             onChange={(e) => setSystemPrompt(e.target.value)}
             rows={6}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg font-mono text-sm"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg font-mono text-sm text-gray-900 placeholder:text-gray-400"
             placeholder="Enter system prompt..."
           />
           <p className="mt-2 text-sm text-gray-500">
@@ -253,7 +253,7 @@ export default function SurveyForm({ onSubmit, initialData }: SurveyFormProps) {
                 <select
                   value={question.type}
                   onChange={(e) => updateQuestion(qIndex, { type: e.target.value as QuestionType })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900"
                 >
                   <option value="open">Open-ended</option>
                   <option value="numeric">Numeric</option>
@@ -282,7 +282,7 @@ export default function SurveyForm({ onSubmit, initialData }: SurveyFormProps) {
                 type="text"
                 value={question.text}
                 onChange={(e) => updateQuestion(qIndex, { text: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
                 placeholder="What is your company size?"
               />
             </div>
@@ -298,7 +298,7 @@ export default function SurveyForm({ onSubmit, initialData }: SurveyFormProps) {
                   onChange={(e) =>
                     updateQuestion(qIndex, { choices: e.target.value.split(',').map((s) => s.trim()) })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
                   placeholder="Option 1, Option 2, Option 3"
                 />
               </div>
@@ -316,7 +316,7 @@ export default function SurveyForm({ onSubmit, initialData }: SurveyFormProps) {
                         type="text"
                         value={probe}
                         onChange={(e) => updateProbe(qIndex, pIndex, e.target.value)}
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg"
+                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
                         placeholder="Can you expand on that?"
                       />
                       <button
