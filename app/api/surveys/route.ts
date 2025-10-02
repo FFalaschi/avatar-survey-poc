@@ -11,6 +11,21 @@ import type { CreateSurveyRequest } from '@/types/survey.types'
 
 export async function GET() {
   try {
+    // Check environment variables
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      console.error('Missing Supabase environment variables')
+      return NextResponse.json(
+        {
+          error: 'Server configuration error: Missing Supabase credentials',
+          details: {
+            hasUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+            hasKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+          }
+        },
+        { status: 500 }
+      )
+    }
+
     const supabase = await createSupabaseServer()
 
     const { data: surveys, error } = await supabase
@@ -21,7 +36,7 @@ export async function GET() {
     if (error) {
       console.error('Surveys fetch error:', error)
       return NextResponse.json(
-        { error: error.message },
+        { error: error.message, details: error },
         { status: 500 }
       )
     }
@@ -29,8 +44,15 @@ export async function GET() {
     return NextResponse.json(surveys)
   } catch (error) {
     console.error('Surveys GET error:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorStack = error instanceof Error ? error.stack : undefined
+
     return NextResponse.json(
-      { error: 'Failed to fetch surveys' },
+      {
+        error: 'Failed to fetch surveys',
+        message: errorMessage,
+        stack: errorStack
+      },
       { status: 500 }
     )
   }
