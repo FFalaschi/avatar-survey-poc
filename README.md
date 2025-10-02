@@ -75,8 +75,9 @@ DATABASE_URL=postgresql://postgres:[password]@db.[project].supabase.co:5432/post
 
 1. Log in to [Supabase](https://app.supabase.com)
 2. Go to your project → SQL Editor
-3. Copy the contents of `supabase/migrations/001_initial_schema.sql`
+3. Copy the contents of `supabase/migrations/001_initial_schema_fixed.sql`
 4. Paste into the SQL Editor and run
+5. (Optional) Copy and run `supabase/migrations/002_seed_surveys.sql` to add 3 sample surveys
 
 #### Option B: Using Supabase CLI
 
@@ -99,7 +100,10 @@ After running the migration, you should see these tables in Supabase:
 - `messages`
 - `answers`
 
-The migration also seeds an example survey (`survey_001`) for testing.
+The initial migration includes one example survey. Running the optional seed migration (`002_seed_surveys.sql`) will add 3 additional comprehensive surveys:
+1. **B2B SaaS Product Feedback Survey** - Product research with ratings and feature feedback
+2. **Customer Support Experience Survey** - Support quality assessment with resolution tracking
+3. **Tech Adoption & Decision-Making Survey** - Market research on technology purchasing patterns
 
 ### 5. Generate TypeScript Types (Optional)
 
