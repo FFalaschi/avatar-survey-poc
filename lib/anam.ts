@@ -28,6 +28,23 @@ export async function createSessionToken(
     throw new Error('ANAM_API_KEY environment variable is not set')
   }
 
+  const requestBody = {
+    personaConfig: {
+      name: personaConfig.name,
+      avatarId: personaConfig.avatarId,
+      voiceId: personaConfig.voiceId,
+      llmId: personaConfig.llmId || 'gpt-4o-mini',
+      systemPrompt: personaConfig.systemPrompt,
+    },
+  }
+
+  console.log('Anam API Request:', {
+    url: `${ANAM_API_BASE}/auth/session-token`,
+    hasApiKey: !!apiKey,
+    apiKeyPrefix: apiKey ? apiKey.substring(0, 10) + '...' : 'MISSING',
+    body: requestBody,
+  })
+
   try {
     const response = await fetch(`${ANAM_API_BASE}/auth/session-token`, {
       method: 'POST',
@@ -35,25 +52,31 @@ export async function createSessionToken(
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        personaConfig: {
-          name: personaConfig.name,
-          avatarId: personaConfig.avatarId,
-          voiceId: personaConfig.voiceId,
-          llmId: personaConfig.llmId || 'gpt-4o-mini',
-          systemPrompt: personaConfig.systemPrompt,
-        },
-      }),
+      body: JSON.stringify(requestBody),
+    })
+
+    const responseText = await response.text()
+    console.log('Anam API Response:', {
+      status: response.status,
+      statusText: response.statusText,
+      body: responseText,
     })
 
     if (!response.ok) {
-      const errorText = await response.text()
+      let errorDetails = responseText
+      try {
+        const errorJson = JSON.parse(responseText)
+        errorDetails = JSON.stringify(errorJson, null, 2)
+      } catch {
+        // Response is not JSON, use as-is
+      }
+
       throw new Error(
-        `Anam API error (${response.status}): ${errorText}`
+        `Anam API error (${response.status}): ${errorDetails}`
       )
     }
 
-    const data = await response.json()
+    const data = JSON.parse(responseText)
 
     if (!data.sessionToken) {
       throw new Error('Session token not returned from Anam API')
@@ -61,6 +84,7 @@ export async function createSessionToken(
 
     return data.sessionToken
   } catch (error) {
+    console.error('Anam API Error:', error)
     if (error instanceof Error) {
       throw new Error(`Failed to create Anam session token: ${error.message}`)
     }
