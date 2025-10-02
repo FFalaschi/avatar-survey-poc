@@ -7,7 +7,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@/lib/supabase'
+import { createSupabaseServer } from '@/lib/supabase-server'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -19,7 +19,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params
-    const supabase = await createServerClient()
+    const supabase = await createSupabaseServer()
 
     const { data: survey, error } = await supabase
       .from('surveys')
@@ -51,7 +51,7 @@ export async function PATCH(
   try {
     const { id } = await params
     const body = await request.json()
-    const supabase = await createServerClient()
+    const supabase = await createSupabaseServer()
 
     // Only allow updating specific fields
     const updates: any = {}
@@ -104,7 +104,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params
-    const supabase = await createServerClient()
+    const supabase = await createSupabaseServer()
 
     const { error } = await supabase
       .from('surveys')

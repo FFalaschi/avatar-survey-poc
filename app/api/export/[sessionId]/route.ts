@@ -7,7 +7,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@/lib/supabase'
+import { createSupabaseServer } from '@/lib/supabase-server'
 
 interface RouteParams {
   params: Promise<{ sessionId: string }>
@@ -34,7 +34,7 @@ export async function GET(
 ) {
   try {
     const { sessionId } = await params
-    const supabase = await createServerClient()
+    const supabase = await createSupabaseServer()
 
     // Fetch session data
     const { data: session, error: sessionError } = await supabase

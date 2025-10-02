@@ -11,13 +11,13 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@/lib/supabase'
+import { createSupabaseServer } from '@/lib/supabase-server'
 import type { IngestRequest } from '@/types/survey.types'
 
 export async function POST(request: NextRequest) {
   try {
     const body: IngestRequest = await request.json()
-    const supabase = await createServerClient()
+    const supabase = await createSupabaseServer()
 
     if (body.kind === 'session_start') {
       // Create new session

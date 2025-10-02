@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@/lib/supabase'
+import { createSupabaseServer } from '@/lib/supabase-server'
 import { createSessionToken } from '@/lib/anam'
 import type { SessionTokenRequest, PersonaConfig } from '@/types/survey.types'
 
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch survey from database
-    const supabase = await createServerClient()
+    const supabase = await createSupabaseServer()
     const { data: survey, error: fetchError } = await supabase
       .from('surveys')
       .select('persona_config')

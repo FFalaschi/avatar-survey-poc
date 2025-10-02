@@ -6,12 +6,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@/lib/supabase'
+import { createSupabaseServer } from '@/lib/supabase-server'
 import type { CreateSurveyRequest } from '@/types/survey.types'
 
 export async function GET() {
   try {
-    const supabase = await createServerClient()
+    const supabase = await createSupabaseServer()
 
     const { data: surveys, error } = await supabase
       .from('surveys')
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const supabase = await createServerClient()
+    const supabase = await createSupabaseServer()
 
     const { data: survey, error } = await supabase
       .from('surveys')
