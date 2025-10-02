@@ -28,14 +28,21 @@ export async function createSessionToken(
     throw new Error('ANAM_API_KEY environment variable is not set')
   }
 
+  // Build persona config - only include llmId if it's explicitly set
+  const anamPersonaConfig: any = {
+    name: personaConfig.name,
+    avatarId: personaConfig.avatarId,
+    voiceId: personaConfig.voiceId,
+    systemPrompt: personaConfig.systemPrompt,
+  }
+
+  // Only add llmId if it's provided (don't use default)
+  if (personaConfig.llmId) {
+    anamPersonaConfig.llmId = personaConfig.llmId
+  }
+
   const requestBody = {
-    personaConfig: {
-      name: personaConfig.name,
-      avatarId: personaConfig.avatarId,
-      voiceId: personaConfig.voiceId,
-      llmId: personaConfig.llmId || 'gpt-4o-mini',
-      systemPrompt: personaConfig.systemPrompt,
-    },
+    personaConfig: anamPersonaConfig,
   }
 
   console.log('Anam API Request:', {
