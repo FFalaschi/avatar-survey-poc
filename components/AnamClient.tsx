@@ -96,10 +96,8 @@ export default function AnamClient({
             }),
           })
 
-          // Trigger avatar to start the introduction immediately
-          // The system prompt instructs the avatar to introduce itself and ask the first question
-          console.log('Session ready - triggering introduction')
-          client.talk('Please begin the interview.')
+          // System prompt instructs avatar to introduce itself immediately
+          // No need to call talk() - let the prompt handle the introduction
         })
 
         client.addListener(AnamEvent.MESSAGE_HISTORY_UPDATED, async (messages: any[]) => {
