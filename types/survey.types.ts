@@ -9,7 +9,7 @@ export interface PersonaConfig {
   name: string;
   avatarId: string;
   voiceId: string;
-  // llmId removed - not supported for custom personas in Anam API
+  llmId?: string; // Optional - required for custom personas, specifies which LLM to use
   systemPrompt: string;
 }
 

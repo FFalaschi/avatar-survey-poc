@@ -69,12 +69,13 @@ export async function POST(request: NextRequest) {
       surveyData.questions
     )
 
-    // Create persona config with ONLY fields Anam API accepts
-    // Explicitly exclude llmId - not supported for custom personas
+    // Create persona config with fields Anam API accepts for custom personas
+    // Must include llmId to specify which language model to use
     const dynamicPersonaConfig: PersonaConfig = {
       name: personaConfig.name,
       avatarId: personaConfig.avatarId,
       voiceId: personaConfig.voiceId,
+      llmId: 'anam-gpt-5-chat', // Valid LLM for this Anam account
       systemPrompt,
     }
 
