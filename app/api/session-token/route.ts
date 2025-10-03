@@ -69,9 +69,12 @@ export async function POST(request: NextRequest) {
       surveyData.questions
     )
 
-    // Create persona config with dynamic system prompt
+    // Create persona config with ONLY fields Anam API accepts
+    // Explicitly exclude llmId - not supported for custom personas
     const dynamicPersonaConfig: PersonaConfig = {
-      ...personaConfig,
+      name: personaConfig.name,
+      avatarId: personaConfig.avatarId,
+      voiceId: personaConfig.voiceId,
       systemPrompt,
     }
 
