@@ -29,11 +29,13 @@ export async function createSessionToken(
   }
 
   // Build custom persona with individual components
-  // Use avatarId (visual), voiceId (audio), and systemPrompt (behavior)
+  // New Anam API requires: name, avatarId, voiceId, llmId, systemPrompt
   const requestBody = {
     personaConfig: {
+      name: personaConfig.name,
       avatarId: personaConfig.avatarId,
       voiceId: personaConfig.voiceId,
+      llmId: personaConfig.llmId,
       systemPrompt: personaConfig.systemPrompt,
     },
   }
