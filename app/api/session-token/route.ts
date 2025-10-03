@@ -10,8 +10,8 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase-server'
-import { createSessionToken } from '@/lib/anam'
-import type { SessionTokenRequest, PersonaConfig } from '@/types/survey.types'
+import { createSessionToken, buildSystemPrompt } from '@/lib/anam'
+import type { SessionTokenRequest, PersonaConfig, Survey } from '@/types/survey.types'
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,11 +25,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Fetch survey from database
+    // Fetch full survey from database (including questions)
     const supabase = await createSupabaseServer()
     const { data: survey, error: fetchError } = await supabase
       .from('surveys')
-      .select('persona_config')
+      .select('*')
       .eq('id', surveyId)
       .single()
 
@@ -40,19 +40,50 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Cast to Survey type
+    const surveyData = survey as unknown as Survey
+
     // Extract persona config from survey
-    const personaConfig = survey.persona_config as unknown as PersonaConfig
+    const personaConfig = surveyData.personaConfig as PersonaConfig
 
     // Validate persona config has required fields
-    if (!personaConfig.name || !personaConfig.avatarId || !personaConfig.voiceId || !personaConfig.systemPrompt) {
+    if (!personaConfig.name || !personaConfig.avatarId || !personaConfig.voiceId) {
       return NextResponse.json(
         { error: 'Invalid persona configuration in survey' },
         { status: 500 }
       )
     }
 
+    // Validate questions exist
+    if (!surveyData.questions || !Array.isArray(surveyData.questions) || surveyData.questions.length === 0) {
+      return NextResponse.json(
+        { error: 'Survey has no questions' },
+        { status: 500 }
+      )
+    }
+
+    // Build dynamic system prompt
+    const systemPrompt = buildSystemPrompt(
+      surveyData.title,
+      personaConfig.name,
+      surveyData.questions
+    )
+
+    // Create persona config with dynamic system prompt
+    const dynamicPersonaConfig: PersonaConfig = {
+      ...personaConfig,
+      systemPrompt,
+    }
+
+    console.log('Dynamic System Prompt Generated:', {
+      surveyTitle: surveyData.title,
+      personaName: personaConfig.name,
+      questionCount: surveyData.questions.length,
+      promptLength: systemPrompt.length,
+    })
+
     // Create session token (server-side only)
-    const sessionToken = await createSessionToken(personaConfig)
+    const sessionToken = await createSessionToken(dynamicPersonaConfig)
 
     return NextResponse.json({ sessionToken })
   } catch (error) {
