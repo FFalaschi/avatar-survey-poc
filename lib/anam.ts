@@ -28,12 +28,13 @@ export async function createSessionToken(
     throw new Error('ANAM_API_KEY environment variable is not set')
   }
 
-  // New Anam API format - use personaId instead of individual config
-  // The avatarId IS the personaId in the new API
+  // Build custom persona with individual components
+  // Use avatarId (visual), voiceId (audio), and systemPrompt (behavior)
   const requestBody = {
     personaConfig: {
-      personaId: personaConfig.avatarId, // Avatar ID is the persona ID
-      systemPrompt: personaConfig.systemPrompt, // Override with survey-specific prompt
+      avatarId: personaConfig.avatarId,
+      voiceId: personaConfig.voiceId,
+      systemPrompt: personaConfig.systemPrompt,
     },
   }
 
