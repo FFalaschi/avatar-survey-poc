@@ -40,11 +40,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Cast to Survey type
-    const surveyData = survey as unknown as Survey
+    // Extract persona config from survey (Supabase returns snake_case)
+    const personaConfig = survey.persona_config as unknown as PersonaConfig
 
-    // Extract persona config from survey
-    const personaConfig = surveyData.personaConfig as PersonaConfig
+    // Cast survey to Survey type for questions access
+    const surveyData = survey as unknown as Survey
 
     // Validate persona config has required fields
     if (!personaConfig.name || !personaConfig.avatarId || !personaConfig.voiceId) {
